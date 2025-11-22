@@ -8,11 +8,11 @@
 		<version>3.5.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.micro.pubstream</groupId>
-	<artifactId>pubstream</artifactId>
+	<groupId>com.micro.pubsubstream</groupId>
+	<artifactId>pubsubstream</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>pubstream</name>
-	<description>Demo project for pubstream</description>
+	<name>pubsubstream</name>
+	<description>Demo project for pubsubstream</description>
 	<url/>
 	<properties>
 		<java.version>17</java.version>

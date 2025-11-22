@@ -7,10 +7,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @SpringBootApplication
 @EnableConfigurationProperties(PropertiesConfig.class)
-public class PubstreamApplication {
+public class PubSubstreamApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PubstreamApplication.class, args);
+		SpringApplication.run(PubSubstreamApplication.class, args);
 	}
 
 }

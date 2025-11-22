@@ -11,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 @Getter
 @Setter
 @Validated
-@Configuration
 @ConfigurationProperties(prefix = "gcp")
 public class PropertiesConfig {
 
@@ -20,5 +19,6 @@ public class PropertiesConfig {
     private String key;
     private String projectId;
     private String topicId;
+    private String subscription;
 
 }

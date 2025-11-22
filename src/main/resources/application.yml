@@ -1,6 +1,6 @@
 spring:
   application:
-    name: pubstream
+    name: pubsubstream
 
 
 gcp:
@@ -9,3 +9,4 @@ gcp:
   key: \key.json
   projectId: gke-greentech
   topicId: HEY
+  subscription: HEY-sub

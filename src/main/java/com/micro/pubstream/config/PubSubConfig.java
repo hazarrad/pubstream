@@ -2,10 +2,12 @@ package com.micro.pubstream.config;
 
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.pubsub.v1.MessageReceiver;
 import com.google.cloud.pubsub.v1.Publisher;
+import com.google.cloud.pubsub.v1.Subscriber;
+import com.google.pubsub.v1.ProjectSubscriptionName;
 import com.google.pubsub.v1.TopicName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -18,12 +20,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Configuration
-public class GCPConfig {
-
-    Logger log = LoggerFactory.getLogger(GCPConfig.class);
+@Slf4j
+public class PubSubConfig {
 
     @Autowired
-    @Qualifier("propertiesConfig")
     private PropertiesConfig propConfig;
 
     @Bean
@@ -39,12 +39,30 @@ public class GCPConfig {
 
     }
 
-    @Bean(destroyMethod = "shutdown")
-    public Publisher publisher() throws IOException {
+    @Bean
+    public Publisher publisher(GoogleCredentials googleCredentials) throws IOException {
 
-        TopicName topicName = TopicName.of(propConfig.getProjectId(),propConfig.getTopicId());
+        TopicName topicName = TopicName.of(propConfig.getProjectId(), propConfig.getTopicId());
+        log.info("Creating Publisher for topic: {}", topicName);
         return Publisher.newBuilder(topicName)
-                .setCredentialsProvider(FixedCredentialsProvider.create(googleCredentials()))
+                .setCredentialsProvider(FixedCredentialsProvider.create(googleCredentials))
+                .build();
+    }
+
+
+    @Bean
+    public Subscriber subscriber(GoogleCredentials googleCredentials) throws IOException {
+
+        ProjectSubscriptionName subscriptionName = ProjectSubscriptionName.of(propConfig.getProjectId(), propConfig.getSubscription());
+        log.info("Creating Subscriber for subscription: {}", subscriptionName);
+        MessageReceiver receiver = (message, consumer) -> {
+            String body = message.getData().toStringUtf8();
+            log.info("Received: {}", body);
+            consumer.ack();
+        };
+
+        return Subscriber.newBuilder(subscriptionName, receiver)
+                .setCredentialsProvider(FixedCredentialsProvider.create(googleCredentials))
                 .build();
     }
 
